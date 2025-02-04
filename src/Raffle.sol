@@ -53,6 +53,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     address payable[] private s_players;
     uint256 private s_lastTimeStamp;
     RaffleState private s_raffleState;
+    address private s_recentWinner;
 
     /* Chainlink variables */
     /** @dev Your CHainlink subscription ID. */
@@ -146,10 +147,33 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         emit RequestedRaffleWinner(requestId);
     }
 
+    /**
+     * @dev This is the function that Chainlink VRF node
+     * calls to send the money to the random winner.
+     */
     function fulfillRandomWords(
-        uint256 _requestId,
-        uint256[] calldata _randomWords
-    ) internal override {}
+        uint256,
+        /* requestId */ uint256[] calldata randomWords
+    ) internal override {
+        // s_players size 10
+        // randomNumber 202
+        // 202 % 10 ? what's doesn't divide evenly into 202?
+        // 20 * 10 = 200
+        // 2
+        // 202 % 10 = 2
+        uint256 indexOfWinner = randomWords[0] % s_players.length;
+        address payable recentWinner = s_players[indexOfWinner];
+        s_recentWinner = recentWinner;
+        s_players = new address payable[](0);
+        s_raffleState = RaffleState.OPEN;
+        s_lastTimeStamp = block.timestamp;
+        emit WinnerPicked(recentWinner);
+        (bool success, ) = recentWinner.call{value: address(this).balance}("");
+        // require(success, "Transfer failed");
+        if (!success) {
+            revert Raffle__TransferFailed();
+        }
+    }
 
     /* Getter Functions */
     function getEntranceFee() external view returns (uint256) {
