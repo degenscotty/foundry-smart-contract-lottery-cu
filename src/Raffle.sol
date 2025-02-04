@@ -35,22 +35,33 @@ contract Raffle {
 
     /* State variables */
     uint256 private immutable i_entranceFee;
+    /** @dev the duration of the lottery in seconds */
+    uint256 private immutable i_interval;
     address payable[] private s_players;
+    uint256 private s_lastTimeStamp;
 
     /* Events */
-    event EnteredRaffle(address indexed player);
+    event RaffleEntered(address indexed player);
 
-    constructor(uint256 entranceFee) {
+    constructor(uint256 entranceFee, uint256 interval) {
         i_entranceFee = entranceFee;
+        i_interval = interval;
+        s_lastTimeStamp = block.timestamp;
     }
 
-    function enterRaffle() public payable {
+    function enterRaffle() external payable {
         if (msg.value < i_entranceFee) revert Raffle__SendMoreToRaffle();
         s_players.push(payable(msg.sender));
-        emit EnteredRaffle(msg.sender);
+        emit RaffleEntered(msg.sender);
     }
 
-    function pickWinner() public {}
+    // 1. Get a random number
+    // 2. Use random nummer to pick player
+    // 3. Be automatically called
+    function pickWinner() external {
+        // check to see if enough time has passed
+        block.timestamp - s_lastTimeStamp > i_interval;
+    }
 
     /* Getter Functions */
     function getEntranceFee() external view returns (uint256) {
