@@ -61,7 +61,7 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     bytes32 private immutable i_gasLane;
     uint32 public i_callbackGasLimit;
     /** @dev For this example, retrieve 2 random values in one request. */
-    /** @dev annot exceed VRFCoordinatorV2_5.MAX_NUM_WORDS. */
+    /** @dev cannot exceed VRFCoordinatorV2_5.MAX_NUM_WORDS. */
     uint32 public NUM_WORDS = 2;
     /** @dev The default is 3, but you can set this higher. */
     uint16 public REQUEST_CONFIRMATIONS = 3;
