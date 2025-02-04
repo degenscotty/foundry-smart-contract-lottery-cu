@@ -57,14 +57,14 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
 
     /* Chainlink variables */
     /** @dev Your CHainlink subscription ID. */
-    uint256 public i_subscriptionId;
+    uint256 public immutable i_subscriptionId;
     bytes32 private immutable i_gasLane;
-    uint32 public i_callbackGasLimit;
+    uint32 public immutable i_callbackGasLimit;
     /** @dev For this example, retrieve 2 random values in one request. */
     /** @dev cannot exceed VRFCoordinatorV2_5.MAX_NUM_WORDS. */
-    uint32 public NUM_WORDS = 2;
+    uint32 public constant NUM_WORDS = 1;
     /** @dev The default is 3, but you can set this higher. */
-    uint16 public REQUEST_CONFIRMATIONS = 3;
+    uint16 public constant REQUEST_CONFIRMATIONS = 3;
 
     /* Events */
     event RequestedRaffleWinner(uint256 indexed requestId);
@@ -175,8 +175,42 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         }
     }
 
-    /* Getter Functions */
-    function getEntranceFee() external view returns (uint256) {
+    /**
+     * Getter Functions
+     */
+    function getRaffleState() public view returns (RaffleState) {
+        return s_raffleState;
+    }
+
+    function getNumWords() public pure returns (uint256) {
+        return NUM_WORDS;
+    }
+
+    function getRequestConfirmations() public pure returns (uint256) {
+        return REQUEST_CONFIRMATIONS;
+    }
+
+    function getRecentWinner() public view returns (address) {
+        return s_recentWinner;
+    }
+
+    function getPlayer(uint256 index) public view returns (address) {
+        return s_players[index];
+    }
+
+    function getLastTimeStamp() public view returns (uint256) {
+        return s_lastTimeStamp;
+    }
+
+    function getInterval() public view returns (uint256) {
+        return i_interval;
+    }
+
+    function getEntranceFee() public view returns (uint256) {
         return i_entranceFee;
+    }
+
+    function getNumberOfPlayers() public view returns (uint256) {
+        return s_players.length;
     }
 }
