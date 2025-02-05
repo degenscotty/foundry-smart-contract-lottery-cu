@@ -72,20 +72,20 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     event WinnerPicked(address indexed player);
 
     constructor(
-        uint256 subscriptionId,
-        bytes32 gasLane, // keyHash
-        uint256 interval,
         uint256 entranceFee,
-        uint32 callbackGasLimit,
-        address vrfCoordinatorV2
+        uint256 interval,
+        address vrfCoordinatorV2,
+        bytes32 gasLane, // keyHash
+        uint256 subscriptionId,
+        uint32 callbackGasLimit
     ) VRFConsumerBaseV2Plus(vrfCoordinatorV2) {
-        i_gasLane = gasLane;
-        i_interval = interval;
-        i_subscriptionId = subscriptionId;
         i_entranceFee = entranceFee;
+        i_interval = interval;
+        i_gasLane = gasLane;
+        i_subscriptionId = subscriptionId;
+        i_callbackGasLimit = callbackGasLimit;
         s_raffleState = RaffleState.OPEN;
         s_lastTimeStamp = block.timestamp;
-        i_callbackGasLimit = callbackGasLimit;
     }
 
     function enterRaffle() external payable {
