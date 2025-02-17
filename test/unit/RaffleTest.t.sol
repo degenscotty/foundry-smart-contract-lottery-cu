@@ -31,4 +31,8 @@ contract RaffleTest is Test {
         callbackGasLimit = config.callbackGasLimit;
         subscriptionId = config.subscriptionId;
     }
+
+    function testRaffleInitializesInOpenState() public view {
+        assert(raffle.getRaffleState() == Raffle.RaffleState.OPEN);
+    }
 }
