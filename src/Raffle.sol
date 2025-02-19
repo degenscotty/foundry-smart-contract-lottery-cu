@@ -34,19 +34,25 @@ import {AutomationCompatibleInterface} from "@chainlink/contracts/src/v0.8/inter
  * @dev Implements Chainlink VRF 2.5.
  */
 contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
-    /* Errors */
+    /*//////////////////////////////////////////////////////////////
+                                 ERRORS
+    //////////////////////////////////////////////////////////////*/
     error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
     error Raffle__TransferFailed();
     error Raffle__SendMoreToEnterRaffle();
     error Raffle__RaffleNotOpen();
 
-    /* Type declarations */
+    /*//////////////////////////////////////////////////////////////
+                           TYPE DECLARATIONS
+    //////////////////////////////////////////////////////////////*/
     enum RaffleState {
         OPEN,
         CALCULATING
     }
 
-    /* Lottery variables */
+    /*//////////////////////////////////////////////////////////////
+                           LOTTERY VARIABLES
+    //////////////////////////////////////////////////////////////*/
     uint256 private immutable i_entranceFee;
     /** @dev the duration of the lottery in seconds */
     uint256 private immutable i_interval;
@@ -55,7 +61,9 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     RaffleState private s_raffleState;
     address private s_recentWinner;
 
-    /* Chainlink variables */
+    /*//////////////////////////////////////////////////////////////
+                          CHAINLINK VARIABLES
+    //////////////////////////////////////////////////////////////*/
     /** @dev Your CHainlink subscription ID. */
     uint256 public immutable i_subscriptionId;
     bytes32 private immutable i_gasLane;
@@ -66,11 +74,16 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
     /** @dev The default is 3, but you can set this higher. */
     uint16 public constant REQUEST_CONFIRMATIONS = 3;
 
-    /* Events */
+    /*//////////////////////////////////////////////////////////////
+                                 EVENTS
+    //////////////////////////////////////////////////////////////*/
     event RequestedRaffleWinner(uint256 indexed requestId);
     event RaffleEnter(address indexed player);
     event WinnerPicked(address indexed player);
 
+    /*//////////////////////////////////////////////////////////////
+                               FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
     constructor(
         uint256 entranceFee,
         uint256 interval,
@@ -184,9 +197,9 @@ contract Raffle is VRFConsumerBaseV2Plus, AutomationCompatibleInterface {
         }
     }
 
-    /**
-     * Getter Functions
-     */
+    /*//////////////////////////////////////////////////////////////
+                            GETTER FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
     function getRaffleState() public view returns (RaffleState) {
         return s_raffleState;
     }

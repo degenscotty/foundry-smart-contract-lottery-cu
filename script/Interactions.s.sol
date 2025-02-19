@@ -26,7 +26,7 @@ contract CreateSubscription is Script {
         return (subId, vrfCoordinator);
     }
 
-    function run() public {
+    function run() external {
         createSubscriptionUsingConfig();
     }
 }
@@ -66,7 +66,7 @@ contract FundSubscription is Script, CodeConstants {
         }
     }
 
-    function run() public {
+    function run() external {
         fundSubscriptionUsingConfig();
     }
 }
